@@ -30,57 +30,72 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmIntroduceDB));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cbAuthorization = new System.Windows.Forms.ComboBox();
-            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.cbSourceAuthorization = new System.Windows.Forms.ComboBox();
+            this.txtSourcePassword = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtUsername = new System.Windows.Forms.TextBox();
+            this.txtSourceUsername = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtDBName = new System.Windows.Forms.TextBox();
+            this.txtSourceDBName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtServer = new System.Windows.Forms.TextBox();
+            this.txtSourceServer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSubmit = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbDestinationAuthorization = new System.Windows.Forms.ComboBox();
+            this.txtDestinationPassword = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtDestinationUsername = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtDestinationDB = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtDestinationServer = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtTitle = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cbAuthorization);
-            this.groupBox1.Controls.Add(this.txtPassword);
+            this.groupBox1.Controls.Add(this.cbSourceAuthorization);
+            this.groupBox1.Controls.Add(this.txtSourcePassword);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.txtUsername);
+            this.groupBox1.Controls.Add(this.txtSourceUsername);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.txtDBName);
+            this.groupBox1.Controls.Add(this.txtSourceDBName);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.txtServer);
+            this.groupBox1.Controls.Add(this.txtSourceServer);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(13, 8);
+            this.groupBox1.Location = new System.Drawing.Point(13, 43);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(312, 189);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "مشخصات پایگاه داده";
+            this.groupBox1.Text = "مشخصات پایگاه داده مبدا";
             // 
-            // cbAuthorization
+            // cbSourceAuthorization
             // 
-            this.cbAuthorization.FormattingEnabled = true;
-            this.cbAuthorization.Location = new System.Drawing.Point(7, 89);
-            this.cbAuthorization.Name = "cbAuthorization";
-            this.cbAuthorization.Size = new System.Drawing.Size(187, 24);
-            this.cbAuthorization.TabIndex = 3;
+            this.cbSourceAuthorization.FormattingEnabled = true;
+            this.cbSourceAuthorization.Location = new System.Drawing.Point(7, 89);
+            this.cbSourceAuthorization.Name = "cbSourceAuthorization";
+            this.cbSourceAuthorization.Size = new System.Drawing.Size(187, 24);
+            this.cbSourceAuthorization.TabIndex = 4;
+            this.cbSourceAuthorization.SelectedIndexChanged += new System.EventHandler(this.cbSourceAuthorization_SelectedIndexChanged);
             // 
-            // txtPassword
+            // txtSourcePassword
             // 
-            this.txtPassword.Enabled = false;
-            this.txtPassword.Location = new System.Drawing.Point(7, 148);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtPassword.Size = new System.Drawing.Size(187, 23);
-            this.txtPassword.TabIndex = 5;
+            this.txtSourcePassword.Enabled = false;
+            this.txtSourcePassword.Location = new System.Drawing.Point(7, 148);
+            this.txtSourcePassword.Name = "txtSourcePassword";
+            this.txtSourcePassword.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtSourcePassword.Size = new System.Drawing.Size(187, 23);
+            this.txtSourcePassword.TabIndex = 6;
             // 
             // label5
             // 
@@ -91,14 +106,14 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "رمز عبور :";
             // 
-            // txtUsername
+            // txtSourceUsername
             // 
-            this.txtUsername.Enabled = false;
-            this.txtUsername.Location = new System.Drawing.Point(7, 119);
-            this.txtUsername.Name = "txtUsername";
-            this.txtUsername.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtUsername.Size = new System.Drawing.Size(187, 23);
-            this.txtUsername.TabIndex = 4;
+            this.txtSourceUsername.Enabled = false;
+            this.txtSourceUsername.Location = new System.Drawing.Point(7, 119);
+            this.txtSourceUsername.Name = "txtSourceUsername";
+            this.txtSourceUsername.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtSourceUsername.Size = new System.Drawing.Size(187, 23);
+            this.txtSourceUsername.TabIndex = 5;
             // 
             // label4
             // 
@@ -118,13 +133,13 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "نوع حفاظت : ";
             // 
-            // txtDBName
+            // txtSourceDBName
             // 
-            this.txtDBName.Location = new System.Drawing.Point(7, 61);
-            this.txtDBName.Name = "txtDBName";
-            this.txtDBName.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtDBName.Size = new System.Drawing.Size(187, 23);
-            this.txtDBName.TabIndex = 2;
+            this.txtSourceDBName.Location = new System.Drawing.Point(7, 61);
+            this.txtSourceDBName.Name = "txtSourceDBName";
+            this.txtSourceDBName.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtSourceDBName.Size = new System.Drawing.Size(187, 23);
+            this.txtSourceDBName.TabIndex = 3;
             // 
             // label2
             // 
@@ -135,13 +150,13 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "نام پایگاه داده :";
             // 
-            // txtServer
+            // txtSourceServer
             // 
-            this.txtServer.Location = new System.Drawing.Point(7, 32);
-            this.txtServer.Name = "txtServer";
-            this.txtServer.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtServer.Size = new System.Drawing.Size(187, 23);
-            this.txtServer.TabIndex = 1;
+            this.txtSourceServer.Location = new System.Drawing.Point(7, 32);
+            this.txtSourceServer.Name = "txtSourceServer";
+            this.txtSourceServer.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtSourceServer.Size = new System.Drawing.Size(187, 23);
+            this.txtSourceServer.TabIndex = 2;
             // 
             // label1
             // 
@@ -154,20 +169,150 @@
             // 
             // btnSubmit
             // 
-            this.btnSubmit.Location = new System.Drawing.Point(13, 204);
+            this.btnSubmit.Location = new System.Drawing.Point(12, 436);
             this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(312, 29);
-            this.btnSubmit.TabIndex = 6;
+            this.btnSubmit.Size = new System.Drawing.Size(313, 29);
+            this.btnSubmit.TabIndex = 12;
             this.btnSubmit.Text = "ثبت";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.cbDestinationAuthorization);
+            this.groupBox2.Controls.Add(this.txtDestinationPassword);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.txtDestinationUsername);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.txtDestinationDB);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.txtDestinationServer);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Location = new System.Drawing.Point(13, 240);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Size = new System.Drawing.Size(312, 189);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "مشخصات پایگاه داده مقصد";
+            // 
+            // cbDestinationAuthorization
+            // 
+            this.cbDestinationAuthorization.FormattingEnabled = true;
+            this.cbDestinationAuthorization.Location = new System.Drawing.Point(7, 89);
+            this.cbDestinationAuthorization.Name = "cbDestinationAuthorization";
+            this.cbDestinationAuthorization.Size = new System.Drawing.Size(187, 24);
+            this.cbDestinationAuthorization.TabIndex = 9;
+            this.cbDestinationAuthorization.SelectedIndexChanged += new System.EventHandler(this.cbDestinationAuthorization_SelectedIndexChanged);
+            // 
+            // txtDestinationPassword
+            // 
+            this.txtDestinationPassword.Enabled = false;
+            this.txtDestinationPassword.Location = new System.Drawing.Point(7, 148);
+            this.txtDestinationPassword.Name = "txtDestinationPassword";
+            this.txtDestinationPassword.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtDestinationPassword.Size = new System.Drawing.Size(187, 23);
+            this.txtDestinationPassword.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(217, 151);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(61, 16);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "رمز عبور :";
+            // 
+            // txtDestinationUsername
+            // 
+            this.txtDestinationUsername.Enabled = false;
+            this.txtDestinationUsername.Location = new System.Drawing.Point(7, 119);
+            this.txtDestinationUsername.Name = "txtDestinationUsername";
+            this.txtDestinationUsername.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtDestinationUsername.Size = new System.Drawing.Size(187, 23);
+            this.txtDestinationUsername.TabIndex = 10;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(216, 122);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(71, 16);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "نام کاربری :";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(212, 93);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(83, 16);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "نوع حفاظت : ";
+            // 
+            // txtDestinationDB
+            // 
+            this.txtDestinationDB.Location = new System.Drawing.Point(7, 61);
+            this.txtDestinationDB.Name = "txtDestinationDB";
+            this.txtDestinationDB.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtDestinationDB.Size = new System.Drawing.Size(187, 23);
+            this.txtDestinationDB.TabIndex = 8;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(215, 64);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(90, 16);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "نام پایگاه داده :";
+            // 
+            // txtDestinationServer
+            // 
+            this.txtDestinationServer.Location = new System.Drawing.Point(7, 32);
+            this.txtDestinationServer.Name = "txtDestinationServer";
+            this.txtDestinationServer.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtDestinationServer.Size = new System.Drawing.Size(187, 23);
+            this.txtDestinationServer.TabIndex = 7;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(215, 35);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(78, 16);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "آدرس سرور :";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 16);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(77, 16);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "نام عملیات :";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.Location = new System.Drawing.Point(106, 13);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.txtTitle.Size = new System.Drawing.Size(219, 23);
+            this.txtTitle.TabIndex = 0;
             // 
             // frmIntroduceDB
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(338, 241);
+            this.ClientSize = new System.Drawing.Size(338, 479);
             this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.txtTitle);
+            this.Controls.Add(this.label11);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -178,26 +323,43 @@
             this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "تعریف پایگاه داده مبدا";
+            this.Text = "افزودن";
+            this.Load += new System.EventHandler(this.frmIntroduceDB_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox cbAuthorization;
-        private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.ComboBox cbSourceAuthorization;
+        private System.Windows.Forms.TextBox txtSourcePassword;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtUsername;
+        private System.Windows.Forms.TextBox txtSourceUsername;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtDBName;
+        private System.Windows.Forms.TextBox txtSourceDBName;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtServer;
+        private System.Windows.Forms.TextBox txtSourceServer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnSubmit;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ComboBox cbDestinationAuthorization;
+        private System.Windows.Forms.TextBox txtDestinationPassword;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtDestinationUsername;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtDestinationDB;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtDestinationServer;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtTitle;
     }
 }

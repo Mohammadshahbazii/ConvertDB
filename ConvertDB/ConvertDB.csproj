@@ -58,6 +58,12 @@
     <Compile Include="frmDBRelations.Designer.cs">
       <DependentUpon>frmDBRelations.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDefaultDBSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDefaultDBSetting.Designer.cs">
+      <DependentUpon>frmDefaultDBSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmIntroduceDB.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +77,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmDBRelations.resx">
       <DependentUpon>frmDBRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDefaultDBSetting.resx">
+      <DependentUpon>frmDefaultDBSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmIntroduceDB.resx">
       <DependentUpon>frmIntroduceDB.cs</DependentUpon>
@@ -142,6 +151,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-progress-25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-refresh-25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bussiness\Bussiness.csproj">
+      <Project>{bba916b7-c974-4e86-8045-33f457342ad5}</Project>
+      <Name>Bussiness</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{7e472604-7f30-4238-be38-86832669d1d4}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{FB30FCAE-F8F8-4EB0-A3C3-61D5C05ED0F0}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
