@@ -89,8 +89,62 @@ namespace ConvertDB
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            btnConvert.Enabled = false;
-            dgvConverts.DataSource = eventsRepository.GetEvents();
+            BindItems();
+        }
+
+        private void BindItems()
+        {
+            string connectionString = Helpers.GetDefaultConnectionString();
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                btnCreateDataBase.Enabled = true;
+                lblWelcome.Visible = true;
+                lblWelcome.Text = "با سلام و احترام ! \n\n به نرم افزار انتقال اطلاعات پایگاه داده خوش آمدید\n\nبرای ایجاد پایگاه داده نرم افزار به منوی تنظیمات و ایجاد پایگاه داده نرم افزار کلیک کنید";
+                lblWelcome.TextAlign = ContentAlignment.MiddleCenter;
+                pbWelcome.Visible = true;
+                btnDefaultDBSetting.Enabled = false;
+                btnConvert.Visible = false;
+                btnConvert.Enabled = false;
+                btnRefresh.Visible = false;
+                dgvConverts.Visible = false;
+                btnDBRelations.Visible = false;
+                btnCreate.Visible = false;
+                btnEdit.Visible = false;
+                btnDelete.Visible = false;
+            }
+            else
+            {
+                btnCreateDataBase.Enabled = false;
+                btnDefaultDBSetting.Enabled = true;
+                lblWelcome.Visible = false;
+                pbWelcome .Visible = false;
+                btnConvert.Visible = true;
+                btnRefresh.Visible = true;
+                btnDBRelations.Visible = true;
+                btnConvert.Enabled = false;
+                dgvConverts.Visible = true;
+                btnCreate.Visible = true;
+                btnEdit.Visible = true;
+                btnDelete.Visible = true;
+
+                var list = eventsRepository.GetEvents();
+                dgvConverts.DataSource = list;
+                if (list.Any())
+                {
+                    btnEdit.Enabled = true;
+                    btnDelete.Enabled = true;
+                    btnDBRelations.Enabled = true;
+                }
+                else
+                {
+                    btnDBRelations.Enabled = false;
+                    btnEdit.Enabled = false;
+                    btnDelete.Enabled = false;
+                }
+            }
+
+            
         }
 
         private void btnDBRelations_Click(object sender, EventArgs e)
@@ -111,7 +165,7 @@ namespace ConvertDB
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnEdit_Click(object sender, EventArgs e)
         {
             frmIntroduceDB frmIntroduceDB = new frmIntroduceDB();
             frmIntroduceDB.Text = "ویرایش";
@@ -170,6 +224,13 @@ namespace ConvertDB
                 }
                 Form1_Load(null, null);
             }
+        }
+
+        private void btnCreateDataBase_Click(object sender, EventArgs e)
+        {
+            frmCreateDBResult frmCreateDB = new frmCreateDBResult();
+            frmCreateDB.ShowDialog();
+            BindItems();
         }
     }
 }

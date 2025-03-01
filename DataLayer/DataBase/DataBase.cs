@@ -208,16 +208,8 @@ namespace DataLayer
                         command.Parameters.AddWithValue("@DBName", dataBaseInfo.DataBaseName);
                         command.Parameters.AddWithValue("@AuthTypeID", dataBaseInfo.AuthenticationType.TypeID);
 
-                        if (dataBaseInfo.AuthenticationType.TypeID == 1)
-                        {
-                            command.Parameters.AddWithValue("@Username", DBNull.Value);
-                            command.Parameters.AddWithValue("@Password", DBNull.Value);
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue("@Username", dataBaseInfo.Username);
-                            command.Parameters.AddWithValue("@Password", dataBaseInfo.Password);
-                        }
+                        command.Parameters.AddWithValue("@Username", dataBaseInfo.Username);
+                        command.Parameters.AddWithValue("@Password", dataBaseInfo.Password);
 
                         // Execute the query and retrieve the DBID
                         object result = command.ExecuteScalar();

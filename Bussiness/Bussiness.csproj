@@ -44,11 +44,13 @@
     <Compile Include="Interfaces\DataBase\IAuthTypeRepository.cs" />
     <Compile Include="Interfaces\DataBase\IDataBaseRepository.cs" />
     <Compile Include="Interfaces\Events\IEventsRepository.cs" />
+    <Compile Include="Interfaces\General\IGeneralRepository.cs" />
     <Compile Include="Interfaces\Relations\IRelationsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataBase\AuthTypeRepository.cs" />
     <Compile Include="Services\DataBase\DataBaseRepository.cs" />
     <Compile Include="Services\Events\EventsRepository.cs" />
+    <Compile Include="Services\General\GeneralRepository.cs" />
     <Compile Include="Services\Relations\RelationsRepository.cs" />
   </ItemGroup>
   <ItemGroup>

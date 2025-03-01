@@ -35,7 +35,7 @@
             this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CreateDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
             this.pbConvert = new System.Windows.Forms.ProgressBar();
             this.lblConvert = new System.Windows.Forms.Label();
@@ -44,11 +44,16 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.تنظیماتToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCreateDataBase = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnDefaultDBSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDBRelations = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblWelcome = new System.Windows.Forms.Label();
+            this.pbWelcome = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvConverts)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbWelcome)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvConverts
@@ -72,6 +77,7 @@
             this.dgvConverts.Location = new System.Drawing.Point(12, 63);
             this.dgvConverts.Name = "dgvConverts";
             this.dgvConverts.ReadOnly = true;
+            this.dgvConverts.RowHeadersWidth = 51;
             this.dgvConverts.Size = new System.Drawing.Size(398, 183);
             this.dgvConverts.TabIndex = 1;
             this.dgvConverts.SelectionChanged += new System.EventHandler(this.dgvConverts_SelectionChanged);
@@ -80,14 +86,17 @@
             // 
             this.ID.DataPropertyName = "ID";
             this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
             this.ID.ReadOnly = true;
             this.ID.Visible = false;
+            this.ID.Width = 125;
             // 
             // Name
             // 
             this.Name.DataPropertyName = "Name";
             this.Name.HeaderText = "نام عملیات";
+            this.Name.MinimumWidth = 6;
             this.Name.Name = "Name";
             this.Name.ReadOnly = true;
             this.Name.Width = 120;
@@ -96,6 +105,7 @@
             // 
             this.CreateDate.DataPropertyName = "CreateDate";
             this.CreateDate.HeaderText = "تاریخ";
+            this.CreateDate.MinimumWidth = 6;
             this.CreateDate.Name = "CreateDate";
             this.CreateDate.ReadOnly = true;
             this.CreateDate.Width = 140;
@@ -105,18 +115,19 @@
             this.Status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Status.DataPropertyName = "Status";
             this.Status.HeaderText = "وضعیت";
+            this.Status.MinimumWidth = 6;
             this.Status.Name = "Status";
             this.Status.ReadOnly = true;
             // 
-            // button1
+            // btnEdit
             // 
-            this.button1.Image = global::ConvertDB.Properties.Resources.icons8_edit_20;
-            this.button1.Location = new System.Drawing.Point(42, 31);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(30, 30);
-            this.button1.TabIndex = 5;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnEdit.Image = global::ConvertDB.Properties.Resources.icons8_edit_20;
+            this.btnEdit.Location = new System.Drawing.Point(42, 31);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(30, 30);
+            this.btnEdit.TabIndex = 5;
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnCreate
             // 
@@ -142,7 +153,7 @@
             this.lblConvert.BackColor = System.Drawing.SystemColors.Control;
             this.lblConvert.Location = new System.Drawing.Point(222, 38);
             this.lblConvert.Name = "lblConvert";
-            this.lblConvert.Size = new System.Drawing.Size(41, 16);
+            this.lblConvert.Size = new System.Drawing.Size(54, 21);
             this.lblConvert.TabIndex = 8;
             this.lblConvert.Text = "label1";
             this.lblConvert.Visible = false;
@@ -174,30 +185,45 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.تنظیماتToolStripMenuItem,
             this.btnDBRelations,
             this.btnRefresh});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(422, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(422, 28);
             this.menuStrip1.TabIndex = 10;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // تنظیماتToolStripMenuItem
             // 
             this.تنظیماتToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnCreateDataBase,
+            this.toolStripSeparator1,
             this.btnDefaultDBSetting});
             this.تنظیماتToolStripMenuItem.Image = global::ConvertDB.Properties.Resources.icons8_settings_25;
             this.تنظیماتToolStripMenuItem.Name = "تنظیماتToolStripMenuItem";
-            this.تنظیماتToolStripMenuItem.Size = new System.Drawing.Size(78, 20);
+            this.تنظیماتToolStripMenuItem.Size = new System.Drawing.Size(98, 24);
             this.تنظیماتToolStripMenuItem.Text = "تنظیمات";
             this.تنظیماتToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            // 
+            // btnCreateDataBase
+            // 
+            this.btnCreateDataBase.Name = "btnCreateDataBase";
+            this.btnCreateDataBase.Size = new System.Drawing.Size(246, 26);
+            this.btnCreateDataBase.Text = "ایجاد پایگاه داده نرم افزار";
+            this.btnCreateDataBase.Click += new System.EventHandler(this.btnCreateDataBase_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(243, 6);
             // 
             // btnDefaultDBSetting
             // 
             this.btnDefaultDBSetting.Name = "btnDefaultDBSetting";
-            this.btnDefaultDBSetting.Size = new System.Drawing.Size(166, 22);
+            this.btnDefaultDBSetting.Size = new System.Drawing.Size(246, 26);
             this.btnDefaultDBSetting.Text = "پایگاه داده نرم افزار";
             this.btnDefaultDBSetting.Click += new System.EventHandler(this.btnDefaultDBSetting_Click);
             // 
@@ -205,7 +231,7 @@
             // 
             this.btnDBRelations.Image = global::ConvertDB.Properties.Resources.icons8_table_94;
             this.btnDBRelations.Name = "btnDBRelations";
-            this.btnDBRelations.Size = new System.Drawing.Size(166, 20);
+            this.btnDBRelations.Size = new System.Drawing.Size(212, 24);
             this.btnDBRelations.Text = "تعریف ارتباط پایگاه داده ها";
             this.btnDBRelations.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnDBRelations.Click += new System.EventHandler(this.btnDBRelations_Click);
@@ -214,21 +240,43 @@
             // 
             this.btnRefresh.Image = global::ConvertDB.Properties.Resources.icons8_refresh_25;
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(84, 20);
+            this.btnRefresh.Size = new System.Drawing.Size(106, 24);
             this.btnRefresh.Text = "بروزرسانی";
             this.btnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // lblWelcome
+            // 
+            this.lblWelcome.AutoSize = true;
+            this.lblWelcome.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.lblWelcome.Location = new System.Drawing.Point(19, 168);
+            this.lblWelcome.Name = "lblWelcome";
+            this.lblWelcome.Size = new System.Drawing.Size(28, 16);
+            this.lblWelcome.TabIndex = 11;
+            this.lblWelcome.Text = "test";
+            // 
+            // pbWelcome
+            // 
+            this.pbWelcome.Image = global::ConvertDB.Properties.Resources.icons8_database_100__1_;
+            this.pbWelcome.Location = new System.Drawing.Point(129, 31);
+            this.pbWelcome.Name = "pbWelcome";
+            this.pbWelcome.Size = new System.Drawing.Size(173, 121);
+            this.pbWelcome.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbWelcome.TabIndex = 12;
+            this.pbWelcome.TabStop = false;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(422, 258);
+            this.Controls.Add(this.pbWelcome);
+            this.Controls.Add(this.lblWelcome);
             this.Controls.Add(this.btnConvert);
             this.Controls.Add(this.lblConvert);
             this.Controls.Add(this.pbConvert);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnCreate);
             this.Controls.Add(this.dgvConverts);
             this.Controls.Add(this.menuStrip1);
@@ -246,6 +294,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvConverts)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbWelcome)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,7 +302,7 @@
 
         #endregion
         private System.Windows.Forms.DataGridView dgvConverts;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnCreate;
         private System.Windows.Forms.ProgressBar pbConvert;
         private System.Windows.Forms.Label lblConvert;
@@ -269,6 +318,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Name;
         private System.Windows.Forms.DataGridViewTextBoxColumn CreateDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private System.Windows.Forms.ToolStripMenuItem btnCreateDataBase;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Label lblWelcome;
+        private System.Windows.Forms.PictureBox pbWelcome;
     }
 }
 

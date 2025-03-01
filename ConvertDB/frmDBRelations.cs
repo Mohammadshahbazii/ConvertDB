@@ -39,7 +39,23 @@ namespace ConvertDB
 
         private void BindGrid()
         {
-            dgvRelations.DataSource = relationsRepository.GetRelationsByEventID(eventID);
+            var list = relationsRepository.GetRelationsByEventID(eventID);
+
+            dgvRelations.DataSource = list;
+
+            if (list.Any())
+            {
+                btnEdit.Enabled = true;
+                btnDelete.Enabled = true;
+                txtSearch.Enabled = true;
+            }
+            else 
+            {
+                btnEdit.Enabled = false;
+                btnDelete.Enabled = false;
+                txtSearch.Enabled = false;
+
+            }
         }
 
         private void frmDBRelations_Load(object sender, EventArgs e)
@@ -49,6 +65,49 @@ namespace ConvertDB
             destinationDB_ID = eventItem.DBDestinationID;
 
             BindGrid();
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            frmNewRelation newRelation = new frmNewRelation();
+            newRelation.relationID = Convert.ToInt32(dgvRelations.CurrentRow.Cells[0].Value.ToString());
+            newRelation.eventID = eventID;
+            newRelation.Text = "ویرایش";
+            if (newRelation.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show("عملیات با موفقیت انجام شد", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                BindGrid();
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            var relationID = Convert.ToInt32(dgvRelations.CurrentRow.Cells[0].Value.ToString());
+            DialogResult dr = MessageBox.Show("آیا از حذف ردیف انتخاب شده اطمینان دارید ؟", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dr == DialogResult.Yes) 
+            {
+                if (relationsRepository.Delete(relationID))
+                {
+                    MessageBox.Show("عملیات با موفقیت انجام شد", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    BindGrid();
+                }
+                else
+                {
+                    MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            dgvRelations.DataSource = relationsRepository.Search(txtSearch.Text);
+        }
+
+        private void dgvRelations_SelectionChanged(object sender, EventArgs e)
+        {
+            btnEdit.Enabled = true;
+            btnDelete.Enabled = true;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace ConvertDB
     public partial class frmNewRelation : Form
     {
         public int eventID;
+        public int relationID;
         private DataBaseInfo sourceDB;
         private DataBaseInfo destinationDB;
 
@@ -37,8 +38,19 @@ namespace ConvertDB
             sourceDB = dataBaseRepository.GetByID(sourceDB_ID);
             destinationDB = dataBaseRepository.GetByID(destinationDB_ID);
 
+
             LoadSourceTableNames(Helpers.CreateConnectionString(sourceDB));
             LoadDestinationTableNames(Helpers.CreateConnectionString(destinationDB));
+
+            if (this.Text == "ویرایش")
+            {
+                var model = relationsRepository.GetById(relationID);
+
+                cbSourceTables.SelectedItem = model.SourceTableName;
+                cbSourceColumns.SelectedItem = model.SourceColumnName;
+                cbDestinationTables.SelectedItem = model.DestinationTableName;
+                cbDestinationColumns.SelectedItem = model.DestinationColumnName;
+            }
         }
 
         private void LoadSourceTableNames(string connectionString)
@@ -123,21 +135,44 @@ namespace ConvertDB
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            RelationItemModels relation = new RelationItemModels() 
+            if (this.Text != "ویرایش")
             {
-                SourceTableName = cbSourceTables.SelectedItem?.ToString(),
-                SourceColumnName = cbSourceColumns.SelectedItem?.ToString(),
-                DestinationColumnName = cbDestinationColumns.SelectedItem?.ToString(),
-                DestinationTableName = cbDestinationTables.SelectedItem?.ToString(),
-                EventID = eventID,
-            };
-            if (relationsRepository.Create(relation))
-            {
-                DialogResult = DialogResult.OK;
+                RelationItemModels relation = new RelationItemModels()
+                {
+                    SourceTableName = cbSourceTables.SelectedItem?.ToString(),
+                    SourceColumnName = cbSourceColumns.SelectedItem?.ToString(),
+                    DestinationColumnName = cbDestinationColumns.SelectedItem?.ToString(),
+                    DestinationTableName = cbDestinationTables.SelectedItem?.ToString(),
+                    EventID = eventID,
+                };
+                if (relationsRepository.Create(relation))
+                {
+                    DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    MessageBox.Show($"هنگام عملیات خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show($"هنگام عملیات خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                RelationItemModels relation = new RelationItemModels()
+                {
+                    ID = relationID,
+                    SourceTableName = cbSourceTables.SelectedItem?.ToString(),
+                    SourceColumnName = cbSourceColumns.SelectedItem?.ToString(),
+                    DestinationColumnName = cbDestinationColumns.SelectedItem?.ToString(),
+                    DestinationTableName = cbDestinationTables.SelectedItem?.ToString(),
+                    EventID = eventID,
+                };
+                if (relationsRepository.Update(relation))
+                {
+                    DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    MessageBox.Show($"هنگام عملیات خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
