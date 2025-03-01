@@ -37,10 +37,12 @@
             this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SourceTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SourceColumns = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SourceColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DestinationTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DestinationColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRelations)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +55,7 @@
             this.dgvRelations.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -61,13 +63,16 @@
             this.dgvRelations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvRelations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRelations.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
             this.SourceTableName,
-            this.SourceColumns,
+            this.SourceColumnName,
             this.DestinationTableName,
-            this.DestinationColumnName});
+            this.DestinationColumnName,
+            this.Event});
             this.dgvRelations.Location = new System.Drawing.Point(12, 41);
             this.dgvRelations.Name = "dgvRelations";
             this.dgvRelations.ReadOnly = true;
+            this.dgvRelations.RowHeadersWidth = 51;
             this.dgvRelations.Size = new System.Drawing.Size(566, 247);
             this.dgvRelations.TabIndex = 0;
             // 
@@ -79,6 +84,7 @@
             this.btnCreate.Size = new System.Drawing.Size(30, 30);
             this.btnCreate.TabIndex = 1;
             this.btnCreate.UseVisualStyleBackColor = true;
+            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // button1
             // 
@@ -103,7 +109,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(390, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 16);
+            this.label1.Size = new System.Drawing.Size(76, 21);
             this.label1.TabIndex = 4;
             this.label1.Text = "جستجو :";
             // 
@@ -111,26 +117,42 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(455, 14);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(122, 23);
+            this.textBox1.Size = new System.Drawing.Size(122, 27);
             this.textBox1.TabIndex = 5;
+            // 
+            // ID
+            // 
+            this.ID.DataPropertyName = "ID";
+            this.ID.HeaderText = "ID";
+            this.ID.MinimumWidth = 6;
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Visible = false;
+            this.ID.Width = 125;
             // 
             // SourceTableName
             // 
+            this.SourceTableName.DataPropertyName = "SourceTableName";
             this.SourceTableName.HeaderText = "نام جدول منبع";
+            this.SourceTableName.MinimumWidth = 6;
             this.SourceTableName.Name = "SourceTableName";
             this.SourceTableName.ReadOnly = true;
             this.SourceTableName.Width = 130;
             // 
-            // SourceColumns
+            // SourceColumnName
             // 
-            this.SourceColumns.HeaderText = "نام ستون منبع";
-            this.SourceColumns.Name = "SourceColumns";
-            this.SourceColumns.ReadOnly = true;
-            this.SourceColumns.Width = 130;
+            this.SourceColumnName.DataPropertyName = "SourceColumnName";
+            this.SourceColumnName.HeaderText = "نام ستون منبع";
+            this.SourceColumnName.MinimumWidth = 6;
+            this.SourceColumnName.Name = "SourceColumnName";
+            this.SourceColumnName.ReadOnly = true;
+            this.SourceColumnName.Width = 130;
             // 
             // DestinationTableName
             // 
+            this.DestinationTableName.DataPropertyName = "DestinationTableName";
             this.DestinationTableName.HeaderText = "نام جدول مقصد";
+            this.DestinationTableName.MinimumWidth = 6;
             this.DestinationTableName.Name = "DestinationTableName";
             this.DestinationTableName.ReadOnly = true;
             this.DestinationTableName.Width = 130;
@@ -138,13 +160,25 @@
             // DestinationColumnName
             // 
             this.DestinationColumnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.DestinationColumnName.DataPropertyName = "DestinationColumnName";
             this.DestinationColumnName.HeaderText = "نام ستون مقصد";
+            this.DestinationColumnName.MinimumWidth = 6;
             this.DestinationColumnName.Name = "DestinationColumnName";
             this.DestinationColumnName.ReadOnly = true;
             // 
+            // Event
+            // 
+            this.Event.DataPropertyName = "EventID";
+            this.Event.HeaderText = "EventID";
+            this.Event.MinimumWidth = 6;
+            this.Event.Name = "Event";
+            this.Event.ReadOnly = true;
+            this.Event.Visible = false;
+            this.Event.Width = 125;
+            // 
             // frmDBRelations
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(589, 300);
             this.Controls.Add(this.textBox1);
@@ -164,6 +198,7 @@
             this.RightToLeftLayout = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "تعریف ارتباط پایگاه داده ها";
+            this.Load += new System.EventHandler(this.frmDBRelations_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRelations)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -178,9 +213,11 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn SourceTableName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SourceColumns;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SourceColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn DestinationTableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn DestinationColumnName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Event;
     }
 }

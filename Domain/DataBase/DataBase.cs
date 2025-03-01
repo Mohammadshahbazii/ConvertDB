@@ -13,6 +13,7 @@ namespace Domain
     }
     public class DataBaseInfo
     {
+        public int ID { get; set; }
         public string ServerAddress { get; set; }
         public string DataBaseName { get; set; }
         public string Username { get; set; }

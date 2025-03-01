@@ -15,6 +15,8 @@ namespace Bussiness
 
         bool Delete(int id);
 
+        bool Update(EventsItemModels model);
+
         bool Create(EventsItemModels model);
     }
 }

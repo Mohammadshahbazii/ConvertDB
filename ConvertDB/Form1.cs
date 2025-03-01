@@ -96,6 +96,7 @@ namespace ConvertDB
         private void btnDBRelations_Click(object sender, EventArgs e)
         {
             frmDBRelations frmDBRelations = new frmDBRelations();
+            frmDBRelations.eventID = Convert.ToInt32(dgvConverts.CurrentRow.Cells[0].Value.ToString());
             frmDBRelations.ShowDialog();
         }
 

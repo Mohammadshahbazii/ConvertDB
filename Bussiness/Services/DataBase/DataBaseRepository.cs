@@ -45,6 +45,7 @@ namespace Bussiness
                     var modelDB = DataBase.GetByID(id);
                     dataBaseInfo = new DataBaseInfo()
                     {
+                        ID = id,
                         ServerAddress = modelDB["ServerName"].ToString(),
                         DataBaseName = modelDB["DBName"].ToString(),
                         Password = modelDB["Password"].ToString(),
@@ -58,6 +59,44 @@ namespace Bussiness
             catch (Exception)
             {
                 return dataBaseInfo;
+            }
+        }
+
+        public List<string> GetColumns(string connectionString, string tableName)
+        {
+            List<string> model = new List<string>();
+            try
+            {
+                return DataBase.GetColumnNames(connectionString,tableName);
+            }
+            catch (Exception)
+            {
+                return model;
+            }
+        }
+
+        public List<string> GetTables(string connectionString)
+        {
+            List<string> model = new List<string>();
+            try
+            {
+                return DataBase.GetTableNames(connectionString);
+            }
+            catch (Exception)
+            {
+                return model;
+            }
+        }
+
+        public bool Update(DataBaseInfo dataBaseInfo)
+        {
+            try
+            {
+                return DataBase.Update(dataBaseInfo);
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

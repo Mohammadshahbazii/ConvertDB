@@ -9,8 +9,11 @@ namespace Bussiness
 {
     public interface IDataBaseRepository
     {
+        List<string> GetTables(string connectionString);
+        List<string> GetColumns(string connectionString, string tableName);
         DataBaseInfo GetByID(int id);
         int Create(DataBaseInfo dataBaseInfo);
+        bool Update(DataBaseInfo dataBaseInfo);
         bool Delete(int id);
     }
 }

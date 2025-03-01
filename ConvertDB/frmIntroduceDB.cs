@@ -17,8 +17,12 @@ namespace ConvertDB
     public partial class frmIntroduceDB : Form
     {
         public int eventID;
+        private int sourceDB_ID;
+        private int destinationDB_ID;
+
         IDataBaseRepository dataBaseRepository = new DataBaseRepository();
         IEventsRepository eventsRepository = new EventsRepository();
+
         public frmIntroduceDB()
         {
             InitializeComponent();
@@ -126,9 +130,103 @@ namespace ConvertDB
                     MessageBox.Show("لطفا نام عملیات را وارد نمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else 
+            else
             {
+                if (!string.IsNullOrEmpty(txtTitle.Text))
+                {
+                    if (!string.IsNullOrEmpty(txtSourceServer.Text) && !string.IsNullOrEmpty(txtDestinationServer.Text) && !string.IsNullOrEmpty(txtSourceDBName.Text) && !string.IsNullOrEmpty(txtDestinationDB.Text))
+                    {
+                        if (((txtSourcePassword.Enabled && txtSourceUsername.Enabled) && (string.IsNullOrEmpty(txtSourceUsername.Text) || string.IsNullOrEmpty(txtSourcePassword.Text))) ||
+                            (txtDestinationPassword.Enabled && txtDestinationUsername.Enabled) && (string.IsNullOrEmpty(txtDestinationUsername.Text) || string.IsNullOrEmpty(txtDestinationPassword.Text)))
+                        {
+                            MessageBox.Show("لطفا موارد خواسته شده را وارد کنید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            DataBaseInfo sourceDataBaseInfo = new DataBaseInfo()
+                            {
+                                ID = sourceDB_ID,
+                                DataBaseName = txtSourceDBName.Text,
+                                Username = txtSourceUsername.Text,
+                                Password = txtSourcePassword.Text,
+                                ServerAddress = txtSourceServer.Text,
+                                AuthenticationType = (DataBaseAuthenticationType)cbSourceAuthorization.SelectedItem
+                            };
 
+                            DataBaseInfo destinationDataBaseInfo = new DataBaseInfo()
+                            {
+                                ID= destinationDB_ID,
+                                DataBaseName = txtDestinationDB.Text,
+                                Username = txtDestinationUsername.Text,
+                                Password = txtDestinationPassword.Text,
+                                ServerAddress = txtDestinationServer.Text,
+                                AuthenticationType = (DataBaseAuthenticationType)cbDestinationAuthorization.SelectedItem
+                            };
+
+                            // Build the connection string
+                            string sourceConnectionString = Helpers.CreateConnectionString(sourceDataBaseInfo);
+                            string destinationConnectionString = Helpers.CreateConnectionString(destinationDataBaseInfo);
+
+
+                            var IsSuccess_SourceDB = Helpers.TestConnectionString(sourceConnectionString);
+                            var IsSuccess_DestinationDB = Helpers.TestConnectionString(destinationConnectionString);
+                            if (!IsSuccess_SourceDB || !IsSuccess_DestinationDB)
+                            {
+                                if (!IsSuccess_SourceDB)
+                                {
+                                    MessageBox.Show("مشخصات وارد شده ی پایگاه داده مبدا نامعتبر می باشد", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("مشخصات وارد شده ی پایگاه داده مقصد نامعتبر می باشد", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                            else
+                            {
+                                bool isSourceDB_Updated = dataBaseRepository.Update(sourceDataBaseInfo);
+                                bool isDestinationDB_Updated = dataBaseRepository.Update(destinationDataBaseInfo);
+
+                                if (!isSourceDB_Updated || !isDestinationDB_Updated)
+                                {
+                                    if (!isSourceDB_Updated)
+                                    {
+                                        MessageBox.Show("هنگام ویرایش مشخصات پایگاه داده مبدا خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("هنگام ویرایش مشخصات پایگاه داده مقصد خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                }
+                                else
+                                {
+                                    EventsItemModels eventItem = new EventsItemModels()
+                                    {
+                                        ID = eventID,
+                                        Name = txtTitle.Text,
+                                        Status = 0
+                                    };
+
+                                    if (!eventsRepository.Update(eventItem))
+                                    {
+                                        MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    else
+                                    {
+                                        DialogResult = DialogResult.OK;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("لطفا موارد خواسته شده را وارد کنید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("لطفا نام عملیات را وارد نمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -145,6 +243,8 @@ namespace ConvertDB
             if (this.Text == "ویرایش")
             {
                 var eventItem = eventsRepository.GetByID(eventID);
+                sourceDB_ID = eventItem.DBSourceID;
+                destinationDB_ID = eventItem.DBDestinationID;
                 var sourceDB = dataBaseRepository.GetByID(eventItem.DBSourceID);
                 var destinationDB = dataBaseRepository.GetByID(eventItem.DBDestinationID);
                 txtTitle.Text = eventItem.Name;
@@ -162,7 +262,7 @@ namespace ConvertDB
                     txtSourceUsername.Text = sourceDB.Username;
                     txtSourcePassword.Text = sourceDB.Password;
                 }
-                
+
 
                 txtDestinationServer.Text = destinationDB.ServerAddress;
                 txtDestinationDB.Text = destinationDB.DataBaseName;

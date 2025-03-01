@@ -13,6 +13,130 @@ namespace DataLayer
 {
     public static class DataBase
     {
+        public static List<string> GetTableNames(string connectionString)
+        {
+            var tableNames = new List<string>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tableNames.Add(reader["TABLE_NAME"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return tableNames;
+            }
+
+            return tableNames;
+        }
+
+        public static List<string> GetColumnNames(string connectionString, string tableName)
+        {
+            var columnNames = new List<string>();
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @TableName;";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@TableName", tableName);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                columnNames.Add(reader["COLUMN_NAME"].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return columnNames;
+            }
+
+            return columnNames;
+        }
+
+        public static bool Update(DataBaseInfo dataBaseInfo)
+        {
+            // Define the connection string
+            string connectionString = Helpers.GetDefaultConnectionString();
+
+            // Define the SQL query
+            string query = @"
+                UPDATE [DataBases]
+                SET 
+                    [ServerName] = @ServerName,
+                    [DBName] = @DBName,
+                    [AuthTypeID] = @AuthTypeID,
+                    [Username] = @Username,
+                    [Password] = @Password
+                WHERE 
+                    [DBID] = @DBID;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add parameters to the query
+                        command.Parameters.AddWithValue("@ServerName", dataBaseInfo.ServerAddress);
+                        command.Parameters.AddWithValue("@DBName", dataBaseInfo.DataBaseName);
+                        command.Parameters.AddWithValue("@AuthTypeID", dataBaseInfo.AuthenticationType.TypeID);
+                        if(dataBaseInfo.AuthenticationType.TypeID == 1)
+                        {
+                            command.Parameters.AddWithValue("@Username", DBNull.Value);
+                            command.Parameters.AddWithValue("@Password", DBNull.Value);
+                        } 
+                        else 
+                        {
+                            command.Parameters.AddWithValue("@Username", dataBaseInfo.Username);
+                            command.Parameters.AddWithValue("@Password", dataBaseInfo.Password);
+                        }
+                        
+                        command.Parameters.AddWithValue("@DBID", dataBaseInfo.ID);
+
+                        // Execute the query and get the number of rows affected
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        // Return true if at least one row was updated
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                // Return false if an exception occurs
+                return false;
+            }
+        }
+
         public static bool Delete(int id)
         {
             // Define the connection string
@@ -83,8 +207,17 @@ namespace DataLayer
                         command.Parameters.AddWithValue("@ServerName", dataBaseInfo.ServerAddress);
                         command.Parameters.AddWithValue("@DBName", dataBaseInfo.DataBaseName);
                         command.Parameters.AddWithValue("@AuthTypeID", dataBaseInfo.AuthenticationType.TypeID);
-                        command.Parameters.AddWithValue("@Username", dataBaseInfo.Username);
-                        command.Parameters.AddWithValue("@Password", dataBaseInfo.Password);
+
+                        if (dataBaseInfo.AuthenticationType.TypeID == 1)
+                        {
+                            command.Parameters.AddWithValue("@Username", DBNull.Value);
+                            command.Parameters.AddWithValue("@Password", DBNull.Value);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@Username", dataBaseInfo.Username);
+                            command.Parameters.AddWithValue("@Password", dataBaseInfo.Password);
+                        }
 
                         // Execute the query and retrieve the DBID
                         object result = command.ExecuteScalar();
@@ -162,8 +295,8 @@ namespace DataLayer
                     AT.AuthTypeID AS AuthTypeID,
                     AT.Title AS AuthType,
                     (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE') AS TableCount
-                FROM [ConvertDB].[dbo].[DataBases] DB
-                JOIN [ConvertDB].[dbo].AuthTypes AT ON DB.AuthTypeID = AT.AuthTypeID
+                FROM [DataBases] DB
+                JOIN AuthTypes AT ON DB.AuthTypeID = AT.AuthTypeID
                 WHERE DB.IsDefault = 'true'";
 
             try

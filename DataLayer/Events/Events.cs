@@ -13,6 +13,7 @@ namespace DataLayer
 {
     public static class Events
     {
+
         public static DataTable GetEventsData()
         {
             // Define the connection string (use your actual connection string)
@@ -141,6 +142,51 @@ namespace DataLayer
             }
             catch (Exception ex)
             {
+                // Return false if an exception occurs
+                return false;
+            }
+        }
+
+        public static bool Update(EventsItemModels eventItem)
+        {
+            // Define the connection string
+            string connectionString = Helpers.GetDefaultConnectionString();
+
+            // Define the SQL query
+            string query = @"
+                UPDATE [Events]
+                SET 
+                    [Title] = @Title,
+                    [Status] = @Status
+                WHERE 
+                    [EventID] = @EventID;";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        // Add parameters to the query
+                        command.Parameters.AddWithValue("@Title", eventItem.Name);
+                        command.Parameters.AddWithValue("@Status", eventItem.Status);
+                        command.Parameters.AddWithValue("@EventID", eventItem.ID);
+
+                        // Execute the query and get the number of rows affected
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        // Return true if at least one row was updated
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error (optional)
+                Console.WriteLine($"Error: {ex.Message}");
+
                 // Return false if an exception occurs
                 return false;
             }

@@ -93,5 +93,17 @@ namespace Bussiness
                 return models;
             }
         }
+
+        public bool Update(EventsItemModels model)
+        {
+            try
+            {
+                return Events.Update(model);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
