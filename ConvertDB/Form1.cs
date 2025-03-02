@@ -16,10 +16,20 @@ namespace ConvertDB
 {
     public partial class Form1 : Form
     {
-        IEventsRepository eventsRepository = new EventsRepository();
+        IEventsRepository eventsRepository;
+        IRelationsRepository relationsRepository;
+        IGeneralRepository generalRepository;
+        IDataBaseRepository dataBaseRepository;
+
         public Form1()
         {
+            eventsRepository = new EventsRepository();
+            generalRepository = new GeneralRepository();
+            relationsRepository = new RelationsRepository();
+            dataBaseRepository = new DataBaseRepository();
+
             InitializeComponent();
+           
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
 
@@ -29,17 +39,63 @@ namespace ConvertDB
             backgroundWorker1.RunWorkerCompleted += BackgroundWorker1_RunWorkerCompleted;
         }
 
-        private void btnConvert_Click(object sender, EventArgs e)
+        private async void btnConvert_Click(object sender, EventArgs e)
         {
-            if (!backgroundWorker1.IsBusy)
+            try
             {
                 lblConvert.Visible = true;
-                pbConvert.Visible = true; 
-                // Reset progress bar and start the task
-                pbConvert.Value = 0;
-                lblConvert.Text = "Task started...";
-                backgroundWorker1.RunWorkerAsync();
+                pbConvert.Visible = true;
+
+                // Disable the button during the transfer
+                btnConvert.Enabled = false;
+
+                var eventID = (int)dgvConverts.CurrentRow.Cells[0].Value;
+                var selectedEvent = eventsRepository.GetByID(eventID);
+
+                var relationList = relationsRepository.GetRelationsByEventID(eventID);
+                var sourceDB = dataBaseRepository.GetByID(selectedEvent.DBSourceID);
+                var destinationDB = dataBaseRepository.GetByID(selectedEvent.DBDestinationID);
+
+                string sourceDB_connectionString = Helpers.CreateConnectionString(sourceDB);
+                string destinationDB_connectionString = Helpers.CreateConnectionString(destinationDB);
+
+                // Start the data transfer process
+                await generalRepository.TransferDataAsync(
+                    progress: new Progress<int>(progressPercentage =>
+                    {
+                        // Update the progress bar
+                        pbConvert.Value = progressPercentage;
+                    }),
+                    relationList,
+                    sourceDB_connectionString,
+                    destinationDB_connectionString
+                );
+                lblConvert.Visible = false;
+                pbConvert.Visible = false;
+
+                // Display a success message
+                MessageBox.Show("انتقال داده ها به پایان رسید", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            catch (Exception ex)
+            {
+                // Display an error message
+                MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Re-enable the button
+                btnConvert.Enabled = true;
+            }
+
+            //if (!backgroundWorker1.IsBusy)
+            //{
+            //    lblConvert.Visible = true;
+            //    pbConvert.Visible = true; 
+            //    // Reset progress bar and start the task
+            //    pbConvert.Value = 0;
+            //    lblConvert.Text = "Task started...";
+            //    backgroundWorker1.RunWorkerAsync();
+            //}
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)

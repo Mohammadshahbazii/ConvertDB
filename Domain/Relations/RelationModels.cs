@@ -16,4 +16,11 @@ namespace Domain
         public int EventID { get; set; }
 
     }
+
+    public class ColumnInfo
+    {
+        public string ColumnName { get; set; }
+        public bool IsNullable { get; set; }
+        public string DataType { get; set; }
+    }
 }
