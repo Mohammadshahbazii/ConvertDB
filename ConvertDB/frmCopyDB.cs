@@ -70,6 +70,8 @@ namespace ConvertDB
 
 
                         var IsSuccess_SourceDB = Helpers.TestConnectionString(sourceConnectionString);
+                        var serverConnectionString = Helpers.GetServerConnectionString(destinationDataBaseInfo.ServerAddress);
+                        var IsSuccess_destinationeDB = Helpers.TestConnectionString(sourceConnectionString);
 
                         if (!IsSuccess_SourceDB)
                         {
@@ -77,123 +79,22 @@ namespace ConvertDB
                         }
                         else
                         {
-                            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                            try
                             {
-                                // Set dialog properties
-                                openFileDialog.Title = "ذخیره فایل بکاپ";
-                                openFileDialog.Filter = "Backup Files (*.bak)|*.bak|All Files (*.*)|*.*";
-                                openFileDialog.DefaultExt = "bak";
-                                openFileDialog.FileName = sourceDataBaseInfo.DataBaseName;
+                                Helpers.CreateDatabaseIfNotExists(serverConnectionString, destinationDataBaseInfo.DataBaseName);
 
-                                // Show the dialog and check if the user selected a path
-                                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    // Get the file path from the dialog
-                                    string backupFilePath = openFileDialog.FileName;
-                                    // Define the source database and destination database names
-                                    string sourceDatabase = sourceDataBaseInfo.DataBaseName;
-                                    string destinationDatabase = destinationDataBaseInfo.DataBaseName;
+                                // Step 1: Copy schema (tables and columns)
+                                Helpers.CopySchema(sourceConnectionString, destinationConnectionString);
 
-                                    string connectionString = $"Server={destinationDataBaseInfo.ServerAddress};Trusted_Connection=True;";
-
-                                    // SQL script to create a copy of the database
-                                    //string sqlCommand = $@"
-                                    //                -- Step 1: Create the new database
-                                    //                CREATE DATABASE [{destinationDatabase}];
-
-                                    //                -- Step 2: Generate a full backup of the source database
-                                    //                BACKUP DATABASE [{sourceDatabase}] 
-                                    //                TO DISK = '{backupFilePath}' WITH FORMAT;
-
-                                    //                -- Step 3: Restore the backup to the new database
-                                    //                RESTORE DATABASE [{destinationDatabase}] 
-                                    //                FROM DISK = '{backupFilePath}' 
-                                    //                WITH MOVE '{sourceDatabase}_Data' TO 'C:\\Program Files\\Microsoft SQL Server\\MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\{destinationDatabase}_Data.mdf',
-                                    //                     MOVE '{sourceDatabase}_Log' TO 'C:\\Program Files\\Microsoft SQL Server\\MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\{destinationDatabase}_Log.ldf';
-                                    //            ";
-                                    using (SqlConnection connection = new SqlConnection(sourceConnectionString))
-                                    {
-                                        connection.Open();
-
-                                        // Step 1: Create the destination database if it doesn't exist
-                                        string createDatabaseCommand = $@"
-                                                                  IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '{destinationDatabase}')
-                                                                  BEGIN
-                                                                      CREATE DATABASE [{destinationDatabase}];
-                                                                  END";
-
-                                        using (SqlCommand command = new SqlCommand(createDatabaseCommand, connection))
-                                        {
-                                            command.ExecuteNonQuery();
-                                        }
-
-                                        // Step 2: Get the list of tables from the source database
-                                        string getTablesQuery = $@"
-                                                                  SELECT TABLE_NAME
-                                                                  FROM [{sourceDatabase}].INFORMATION_SCHEMA.TABLES
-                                                                  WHERE TABLE_TYPE = 'BASE TABLE';";
-
-                                        List<string> tableNames = new List<string>();
-                                        using (SqlCommand command = new SqlCommand(getTablesQuery, connection))
-                                        {
-                                            using (SqlDataReader reader = command.ExecuteReader())
-                                            {
-                                                while (reader.Read())
-                                                {
-                                                    if (reader["TABLE_NAME"].ToString() != "sysdiagrams")
-                                                    {
-                                                        tableNames.Add(reader["TABLE_NAME"].ToString());
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        foreach (string tableName in tableNames)
-                                        {
-                                            // Copy schema (create table in destination database)
-                                            string copySchemaCommand = $@"
-                                                                      SELECT * INTO [{destinationDatabase}].dbo.[{tableName}]
-                                                                      FROM [{sourceDatabase}].dbo.[{tableName}] WHERE 1 = 0;";
-
-                                            using (SqlCommand command = new SqlCommand(copySchemaCommand, connection))
-                                            {
-                                                command.ExecuteNonQuery();
-                                            }
-
-                                            // Copy data (insert all rows into the new table)
-                                            string copyDataCommand = $@"
-                                                                      INSERT INTO [{destinationDatabase}].dbo.[{tableName}]
-                                                                      SELECT * FROM [{sourceDatabase}].dbo.[{tableName}];";
-
-                                            using (SqlCommand command = new SqlCommand(copyDataCommand, connection))
-                                            {
-                                                command.ExecuteNonQuery();
-                                            }
-                                        }
-
-                                        // Step 3: Copy each table (schema and data) to the destination database
-
-                                    }
-                                    // Execute the SQL commands
-                                    //using (SqlConnection connection = new SqlConnection(connectionString))
-                                    //{
-                                    //    SqlCommand command = new SqlCommand(sqlCommand, connection);
-                                    //    connection.Open();
-                                    //    command.ExecuteNonQuery();
-                                    //}
-
-                                    DialogResult = DialogResult.OK;
-                                }
-                                else
-                                {
-                                    MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-
-
-
+                                // Step 2: Copy data
+                                Helpers.CopyData(sourceConnectionString, destinationConnectionString);
+                                DialogResult = DialogResult.OK;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
 
-
-                            DialogResult = DialogResult.OK;
                         }
                     }
 
@@ -205,7 +106,8 @@ namespace ConvertDB
             }
             catch (Exception)
             {
-                MessageBox.Show("عملیات با موفقیت انجام شد", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"هنگام عملیات خطایی رخ داد لطفا مجددا تلاش فرمایید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
         }
 
