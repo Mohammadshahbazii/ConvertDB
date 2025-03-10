@@ -288,5 +288,23 @@ namespace ConvertDB
             frmCreateDB.ShowDialog();
             BindItems();
         }
+
+        private void btnBackupDB_Click(object sender, EventArgs e)
+        {
+            frmBackupDB frm = new frmBackupDB();
+            if(frm.ShowDialog()== DialogResult.OK)
+            {
+                MessageBox.Show("عملیات با موفقیت انجام شد", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnCopyDB_Click(object sender, EventArgs e)
+        {
+            frmCopyDB frm = new frmCopyDB();
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show("عملیات با موفقیت انجام شد", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

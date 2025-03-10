@@ -83,6 +83,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmBackupDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBackupDB.Designer.cs">
+      <DependentUpon>frmBackupDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCopyDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCopyDB.Designer.cs">
+      <DependentUpon>frmCopyDB.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmCreateDBResult.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +129,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBackupDB.resx">
+      <DependentUpon>frmBackupDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCopyDB.resx">
+      <DependentUpon>frmCopyDB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmCreateDBResult.resx">
       <DependentUpon>frmCreateDBResult.cs</DependentUpon>

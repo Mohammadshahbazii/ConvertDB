@@ -47,6 +47,9 @@
             this.btnCreateDataBase = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnDefaultDBSetting = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnBackupDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCopyDB = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDBRelations = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.lblWelcome = new System.Windows.Forms.Label();
@@ -153,7 +156,7 @@
             this.lblConvert.BackColor = System.Drawing.SystemColors.Control;
             this.lblConvert.Location = new System.Drawing.Point(222, 38);
             this.lblConvert.Name = "lblConvert";
-            this.lblConvert.Size = new System.Drawing.Size(54, 21);
+            this.lblConvert.Size = new System.Drawing.Size(41, 16);
             this.lblConvert.TabIndex = 8;
             this.lblConvert.Text = "label1";
             this.lblConvert.Visible = false;
@@ -201,37 +204,59 @@
             this.تنظیماتToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnCreateDataBase,
             this.toolStripSeparator1,
-            this.btnDefaultDBSetting});
+            this.btnDefaultDBSetting,
+            this.toolStripSeparator2,
+            this.btnBackupDB,
+            this.btnCopyDB});
             this.تنظیماتToolStripMenuItem.Image = global::ConvertDB.Properties.Resources.icons8_settings_25;
             this.تنظیماتToolStripMenuItem.Name = "تنظیماتToolStripMenuItem";
-            this.تنظیماتToolStripMenuItem.Size = new System.Drawing.Size(98, 24);
+            this.تنظیماتToolStripMenuItem.Size = new System.Drawing.Size(82, 24);
             this.تنظیماتToolStripMenuItem.Text = "تنظیمات";
             this.تنظیماتToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             // 
             // btnCreateDataBase
             // 
             this.btnCreateDataBase.Name = "btnCreateDataBase";
-            this.btnCreateDataBase.Size = new System.Drawing.Size(246, 26);
+            this.btnCreateDataBase.Size = new System.Drawing.Size(192, 22);
             this.btnCreateDataBase.Text = "ایجاد پایگاه داده نرم افزار";
             this.btnCreateDataBase.Click += new System.EventHandler(this.btnCreateDataBase_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(243, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(189, 6);
             // 
             // btnDefaultDBSetting
             // 
             this.btnDefaultDBSetting.Name = "btnDefaultDBSetting";
-            this.btnDefaultDBSetting.Size = new System.Drawing.Size(246, 26);
+            this.btnDefaultDBSetting.Size = new System.Drawing.Size(192, 22);
             this.btnDefaultDBSetting.Text = "پایگاه داده نرم افزار";
             this.btnDefaultDBSetting.Click += new System.EventHandler(this.btnDefaultDBSetting_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(189, 6);
+            // 
+            // btnBackupDB
+            // 
+            this.btnBackupDB.Name = "btnBackupDB";
+            this.btnBackupDB.Size = new System.Drawing.Size(192, 22);
+            this.btnBackupDB.Text = "تهیه بکاپ از پایگاه داده";
+            this.btnBackupDB.Click += new System.EventHandler(this.btnBackupDB_Click);
+            // 
+            // btnCopyDB
+            // 
+            this.btnCopyDB.Name = "btnCopyDB";
+            this.btnCopyDB.Size = new System.Drawing.Size(192, 22);
+            this.btnCopyDB.Text = "ایجاد پایگاه داده مشابه";
+            this.btnCopyDB.Click += new System.EventHandler(this.btnCopyDB_Click);
             // 
             // btnDBRelations
             // 
             this.btnDBRelations.Image = global::ConvertDB.Properties.Resources.icons8_table_94;
             this.btnDBRelations.Name = "btnDBRelations";
-            this.btnDBRelations.Size = new System.Drawing.Size(212, 24);
+            this.btnDBRelations.Size = new System.Drawing.Size(170, 24);
             this.btnDBRelations.Text = "تعریف ارتباط پایگاه داده ها";
             this.btnDBRelations.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnDBRelations.Click += new System.EventHandler(this.btnDBRelations_Click);
@@ -240,7 +265,7 @@
             // 
             this.btnRefresh.Image = global::ConvertDB.Properties.Resources.icons8_refresh_25;
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(106, 24);
+            this.btnRefresh.Size = new System.Drawing.Size(88, 24);
             this.btnRefresh.Text = "بروزرسانی";
             this.btnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
@@ -251,7 +276,7 @@
             this.lblWelcome.Font = new System.Drawing.Font("Tahoma", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.lblWelcome.Location = new System.Drawing.Point(19, 168);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(28, 16);
+            this.lblWelcome.Size = new System.Drawing.Size(26, 13);
             this.lblWelcome.TabIndex = 11;
             this.lblWelcome.Text = "test";
             // 
@@ -267,7 +292,7 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(422, 258);
             this.Controls.Add(this.pbWelcome);
@@ -322,6 +347,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.Label lblWelcome;
         private System.Windows.Forms.PictureBox pbWelcome;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem btnBackupDB;
+        private System.Windows.Forms.ToolStripMenuItem btnCopyDB;
     }
 }
 

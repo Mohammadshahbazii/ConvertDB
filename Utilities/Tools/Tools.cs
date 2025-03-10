@@ -19,6 +19,19 @@ namespace Utilities
 
     public static class Helpers
     {
+        public static void BackupDatabase(string filePath , DataBaseInfo dataBaseInfo)
+        {
+            var connectionString = Helpers.CreateConnectionString(dataBaseInfo);
+            string backupCommand = $@"BACKUP DATABASE [{dataBaseInfo.DataBaseName}] TO DISK = '{filePath}' WITH FORMAT, MEDIANAME = 'SQLServerBackups', NAME = 'Full Backup';";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(backupCommand, connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public static string GetEventType(int typeID)
         {
             switch (typeID)
