@@ -109,6 +109,7 @@ namespace DataLayer
                    ,[SourceColumnName]
                    ,[DestinationTableName]
                    ,[DestinationColumnName]
+                   ,[FilterCondition]
                    ,[EventID]
                 )
                 VALUES (
@@ -116,6 +117,7 @@ namespace DataLayer
                     @SourceColumn,
                     @DestinationTable,
                     @DestinationColumn,
+                    @FilterCondition,
                     @EventID
                 );";
 
@@ -132,6 +134,7 @@ namespace DataLayer
                         command.Parameters.AddWithValue("@SourceColumn", relation.SourceColumnName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@DestinationTable", relation.DestinationTableName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@DestinationColumn", relation.DestinationColumnName ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@FilterCondition", string.IsNullOrWhiteSpace(relation.FilterCondition) ? (object)DBNull.Value : relation.FilterCondition.Trim());
                         command.Parameters.AddWithValue("@EventID", relation.EventID);
 
                         // Execute the query and get the number of rows affected
@@ -160,13 +163,14 @@ namespace DataLayer
             // Define the SQL query
             string query = @"
                 UPDATE [Relations]
-                SET 
+                SET
                     [SourceTableName] = @SourceTable,
                     [SourceColumnName] = @SourceColumn,
                     [DestinationTableName] = @DestinationTable,
                     [DestinationColumnName] = @DestinationColumn,
+                    [FilterCondition] = @FilterCondition,
                     [EventID] = @EventID
-                WHERE 
+                WHERE
                     [RelationID] = @RelationID;";
 
             try
@@ -182,6 +186,7 @@ namespace DataLayer
                         command.Parameters.AddWithValue("@SourceColumn", relation.SourceColumnName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@DestinationTable", relation.DestinationTableName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@DestinationColumn", relation.DestinationColumnName ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@FilterCondition", string.IsNullOrWhiteSpace(relation.FilterCondition) ? (object)DBNull.Value : relation.FilterCondition.Trim());
                         command.Parameters.AddWithValue("@EventID", relation.EventID);
                         command.Parameters.AddWithValue("@RelationID", relation.ID);
 
@@ -255,7 +260,7 @@ namespace DataLayer
                     connection.Open();
 
                     // Build the SQL query dynamically based on the provided criteria
-                    string query = "  SELECT * FROM [Relations] WHERE SourceTableName LIKE @Search or DestinationTableName LIKE @Search or SourceColumnName like @Search or DestinationColumnName like @Search";
+                    string query = "  SELECT * FROM [Relations] WHERE SourceTableName LIKE @Search or DestinationTableName LIKE @Search or SourceColumnName like @Search or DestinationColumnName like @Search or FilterCondition like @Search";
 
 
                     using (SqlCommand command = new SqlCommand(query, connection))
@@ -367,6 +372,11 @@ namespace DataLayer
             {
                 try
                 {
+                    if (!IsConditionSafe(mapping.FilterCondition))
+                    {
+                        Console.WriteLine($"Skipping mapping for table '{mapping.SourceTableName}' due to unsafe filter condition.");
+                        continue;
+                    }
                     // Step 1: Retrieve column information for the destination table
                     List<ColumnInfo> destinationColumns = GetColumnInfo(newDbConnectionString, mapping.DestinationTableName);
 
@@ -381,7 +391,7 @@ namespace DataLayer
                     {
                         await oldDbConnection.OpenAsync();
 
-                        string selectQuery = $"SELECT [{mapping.SourceColumnName}] FROM [{mapping.SourceTableName}];";
+                        string selectQuery = BuildSelectQuery(mapping);
                         using (SqlCommand selectCommand = new SqlCommand(selectQuery, oldDbConnection))
                         {
                             using (SqlDataReader reader = await selectCommand.ExecuteReaderAsync())
@@ -417,6 +427,38 @@ namespace DataLayer
                     Console.WriteLine($"Error transferring data for mapping {mapping.SourceTableName} -> {mapping.DestinationTableName}: {ex.Message}");
                 }
             }
+        }
+
+        private static string BuildSelectQuery(RelationItemModels mapping)
+        {
+            var builder = new StringBuilder();
+            builder.AppendFormat("SELECT [{0}] FROM [{1}]", mapping.SourceColumnName, mapping.SourceTableName);
+
+            if (!string.IsNullOrWhiteSpace(mapping.FilterCondition))
+            {
+                builder.Append(" WHERE ");
+                builder.Append(mapping.FilterCondition);
+            }
+
+            builder.Append(";");
+            return builder.ToString();
+        }
+
+        private static bool IsConditionSafe(string condition)
+        {
+            if (string.IsNullOrWhiteSpace(condition))
+            {
+                return true;
+            }
+
+            string trimmed = condition.Trim();
+
+            if (trimmed.Contains(";") || trimmed.Contains("--") || trimmed.IndexOf("/*", StringComparison.Ordinal) >= 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

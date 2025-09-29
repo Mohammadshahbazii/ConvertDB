@@ -62,6 +62,7 @@ namespace DataLayer
                             [SourceColumnName] NVARCHAR(100) NOT NULL,
                             [DestinationTableName] NVARCHAR(100) NOT NULL,
                             [DestinationColumnName] NVARCHAR(100) NOT NULL,
+                            [FilterCondition] NVARCHAR(4000) NULL,
                             [EventID] INT NOT NULL
                         );";
 
