@@ -50,6 +50,7 @@ namespace ConvertDB
                 cbSourceColumns.SelectedItem = model.SourceColumnName;
                 cbDestinationTables.SelectedItem = model.DestinationTableName;
                 cbDestinationColumns.SelectedItem = model.DestinationColumnName;
+                txtCondition.Text = model.FilterCondition;
             }
         }
 
@@ -135,6 +136,11 @@ namespace ConvertDB
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
+            if (!TryValidateCondition(out string condition))
+            {
+                return;
+            }
+
             if (this.Text != "ویرایش")
             {
                 RelationItemModels relation = new RelationItemModels()
@@ -144,6 +150,7 @@ namespace ConvertDB
                     DestinationColumnName = cbDestinationColumns.SelectedItem?.ToString(),
                     DestinationTableName = cbDestinationTables.SelectedItem?.ToString(),
                     EventID = eventID,
+                    FilterCondition = condition
                 };
                 if (relationsRepository.Create(relation))
                 {
@@ -164,6 +171,7 @@ namespace ConvertDB
                     DestinationColumnName = cbDestinationColumns.SelectedItem?.ToString(),
                     DestinationTableName = cbDestinationTables.SelectedItem?.ToString(),
                     EventID = eventID,
+                    FilterCondition = condition
                 };
                 if (relationsRepository.Update(relation))
                 {
@@ -174,6 +182,25 @@ namespace ConvertDB
                     MessageBox.Show($"هنگام عملیات خطایی رخ داد . لطفا مجددا تلاش فرمائید", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private bool TryValidateCondition(out string condition)
+        {
+            condition = txtCondition.Text?.Trim();
+
+            if (string.IsNullOrEmpty(condition))
+            {
+                condition = string.Empty;
+                return true;
+            }
+
+            if (condition.Contains(";") || condition.Contains("--") || condition.Contains("/*"))
+            {
+                MessageBox.Show("شرایط فیلتر نباید شامل کاراکترهای غیرمجاز مانند ; یا -- باشد.", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
         }
     }
 }

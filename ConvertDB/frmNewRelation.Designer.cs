@@ -38,9 +38,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbDestinationTables = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblConditionHelp = new System.Windows.Forms.Label();
+            this.txtCondition = new System.Windows.Forms.TextBox();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -141,22 +145,53 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "نام جدول :";
             // 
+            // groupBox3
+            //
+            this.groupBox3.Controls.Add(this.lblConditionHelp);
+            this.groupBox3.Controls.Add(this.txtCondition);
+            this.groupBox3.Location = new System.Drawing.Point(12, 346);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(339, 116);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "شرایط فیلتر";
+            //
+            // lblConditionHelp
+            //
+            this.lblConditionHelp.AutoSize = true;
+            this.lblConditionHelp.Font = new System.Drawing.Font("Tahoma", 8F);
+            this.lblConditionHelp.Location = new System.Drawing.Point(16, 82);
+            this.lblConditionHelp.Name = "lblConditionHelp";
+            this.lblConditionHelp.Size = new System.Drawing.Size(301, 17);
+            this.lblConditionHelp.TabIndex = 1;
+            this.lblConditionHelp.Text = "مثال: Status = 1 (شرط را بدون عبارت WHERE وارد کنید)";
+            //
+            // txtCondition
+            //
+            this.txtCondition.Location = new System.Drawing.Point(19, 32);
+            this.txtCondition.Multiline = true;
+            this.txtCondition.Name = "txtCondition";
+            this.txtCondition.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtCondition.Size = new System.Drawing.Size(301, 47);
+            this.txtCondition.TabIndex = 0;
+            //
             // btnSubmit
-            // 
-            this.btnSubmit.Location = new System.Drawing.Point(12, 346);
+            //
+            this.btnSubmit.Location = new System.Drawing.Point(12, 468);
             this.btnSubmit.Name = "btnSubmit";
             this.btnSubmit.Size = new System.Drawing.Size(339, 34);
-            this.btnSubmit.TabIndex = 2;
+            this.btnSubmit.TabIndex = 3;
             this.btnSubmit.Text = "ثبت";
             this.btnSubmit.UseVisualStyleBackColor = true;
             this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
-            // 
+            //
             // frmNewRelation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(363, 392);
+            this.ClientSize = new System.Drawing.Size(363, 514);
             this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
@@ -175,6 +210,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -191,6 +228,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbDestinationTables;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label lblConditionHelp;
+        private System.Windows.Forms.TextBox txtCondition;
         private System.Windows.Forms.Button btnSubmit;
     }
 }

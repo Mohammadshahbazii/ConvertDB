@@ -37,6 +37,7 @@
             this.SourceColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DestinationTableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DestinationColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilterCondition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -68,6 +69,7 @@
             this.SourceColumnName,
             this.DestinationTableName,
             this.DestinationColumnName,
+            this.FilterCondition,
             this.Event});
             this.dgvRelations.Location = new System.Drawing.Point(12, 41);
             this.dgvRelations.Name = "dgvRelations";
@@ -122,9 +124,18 @@
             this.DestinationColumnName.MinimumWidth = 6;
             this.DestinationColumnName.Name = "DestinationColumnName";
             this.DestinationColumnName.ReadOnly = true;
-            // 
+            //
+            // FilterCondition
+            //
+            this.FilterCondition.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FilterCondition.DataPropertyName = "FilterCondition";
+            this.FilterCondition.HeaderText = "شرط فیلتر";
+            this.FilterCondition.MinimumWidth = 6;
+            this.FilterCondition.Name = "FilterCondition";
+            this.FilterCondition.ReadOnly = true;
+            //
             // Event
-            // 
+            //
             this.Event.DataPropertyName = "EventID";
             this.Event.HeaderText = "EventID";
             this.Event.MinimumWidth = 6;
@@ -224,6 +235,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn SourceColumnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn DestinationTableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn DestinationColumnName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterCondition;
         private System.Windows.Forms.DataGridViewTextBoxColumn Event;
     }
 }

@@ -54,6 +54,7 @@ namespace Bussiness
                     SourceColumnName = modelDB["SourceColumnName"].ToString(),
                     DestinationTableName = modelDB["DestinationTableName"].ToString(),
                     DestinationColumnName = modelDB["DestinationColumnName"].ToString(),
+                    FilterCondition = modelDB.Table.Columns.Contains("FilterCondition") ? modelDB["FilterCondition"].ToString() : string.Empty,
                     EventID = Convert.ToInt32(modelDB["EventID"])
                 };
                 return model;
@@ -83,6 +84,7 @@ namespace Bussiness
                         SourceColumnName = row["SourceColumnName"].ToString(),
                         DestinationTableName = row["DestinationTableName"].ToString(),
                         DestinationColumnName = row["DestinationColumnName"].ToString(),
+                        FilterCondition = dataTable.Columns.Contains("FilterCondition") ? row["FilterCondition"].ToString() : string.Empty,
                         EventID = Convert.ToInt32(row["EventID"])
                     });
                 }
@@ -114,6 +116,7 @@ namespace Bussiness
                         SourceColumnName = row["SourceColumnName"].ToString(),
                         DestinationTableName = row["DestinationTableName"].ToString(),
                         DestinationColumnName = row["DestinationColumnName"].ToString(),
+                        FilterCondition = dataTable.Columns.Contains("FilterCondition") ? row["FilterCondition"].ToString() : string.Empty,
                         EventID = Convert.ToInt32(row["EventID"])
                     });
                 }
