@@ -88,6 +88,9 @@ namespace ConvertDB
 
                                 // Step 2: Copy data
                                 Helpers.CopyData(sourceConnectionString, destinationConnectionString);
+
+                                // Step 3: Copy foreign key constraints
+                                Helpers.CopyForeignKeys(sourceConnectionString, destinationConnectionString);
                                 DialogResult = DialogResult.OK;
                             }
                             catch (Exception ex)
