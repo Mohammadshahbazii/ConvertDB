@@ -463,80 +463,48 @@ namespace Utilities
                         // Get the column sizes for the target table
                         DataTable columnSizes = GetColumnSizes(targetConn, tableSchema, tableName);
 
-                        // Insert data into the target table
-                        while (reader.Read())
+                        // Prepare the insert command with parameters to preserve data types
+                        string[] columnNames = Enumerable.Range(0, reader.FieldCount)
+                                                          .Select(reader.GetName)
+                                                          .ToArray();
+
+                        string columnList = string.Join(", ", columnNames.Select(name => $"[{name}]"));
+                        string[] parameterNames = columnNames.Select((_, index) => $"@p{index}").ToArray();
+                        string parameterList = string.Join(", ", parameterNames);
+                        string insertQuery = $"INSERT INTO {fullTableName} ({columnList}) VALUES ({parameterList})";
+
+                        using (SqlCommand insertCmd = new SqlCommand(insertQuery, targetConn))
                         {
-                            string insertQuery = $"INSERT INTO {fullTableName} VALUES (";
+                            SqlParameter[] parameters = new SqlParameter[reader.FieldCount];
+
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                string columnName = reader.GetName(i);
-                                object value = reader[i];
-
-                                string columnValue;
-                                if (value == DBNull.Value)
-                                {
-                                    columnValue = "NULL";
-                                }
-                                else
-                                {
-                                    columnValue = value.ToString();
-                                }
-
-                                // Truncate the value if it exceeds the column size
-                                int columnSize = GetColumnSize(columnSizes, columnName);
-                                if (columnSize > 0 && columnValue != null && columnValue != "NULL" && columnValue.Length > columnSize)
-                                {
-                                    columnValue = columnValue.Substring(0, columnSize);
-                                }
-
-                                // Check if the column is Unicode (NVARCHAR/NCHAR/NTEXT)
-                                bool isUnicode = IsUnicodeColumn(columnSizes, columnName);
-
-                                // Prefix Unicode strings with N''
-                                if (columnValue == "NULL")
-                                {
-                                    insertQuery += "NULL, ";
-                                }
-                                else if (isUnicode)
-                                {
-                                    columnValue = $"N'{columnValue.Replace("'", "''")}'";
-                                    insertQuery += $"{columnValue}, ";
-                                }
-                                else
-                                {
-                                    columnValue = $"'{columnValue.Replace("'", "''")}'";
-                                    insertQuery += $"{columnValue}, ";
-                                }
+                                string columnName = columnNames[i];
+                                SqlDbType sqlDbType = GetColumnSqlDbType(columnSizes, columnName);
+                                SqlParameter parameter = insertCmd.Parameters.Add(parameterNames[i], sqlDbType);
+                                ConfigureParameter(parameter, columnSizes, columnName);
+                                parameters[i] = parameter;
                             }
-                            insertQuery = insertQuery.TrimEnd(',', ' ') + ")";
 
-                            using (SqlCommand insertCmd = new SqlCommand(insertQuery, targetConn))
+                            // Insert data into the target table
+                            while (reader.Read())
                             {
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    parameters[i].Value = reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i);
+                                }
+
                                 insertCmd.ExecuteNonQuery();
                             }
                         }
                     }
                 }
             }
-        }
-
-        public static bool IsUnicodeColumn(DataTable columnSizes, string columnName)
-        {
-            foreach (DataRow row in columnSizes.Rows)
-            {
-                if (row["COLUMN_NAME"].ToString() == columnName)
-                {
-                    string dataType = row["DATA_TYPE"].ToString().ToUpper();
-                    return dataType.StartsWith("N"); // NVARCHAR, NCHAR, NTEXT, etc.
-                }
-            }
-            return false;
-        }
 
         public static DataTable GetColumnSizes(SqlConnection connection, string tableSchema, string tableName)
         {
             string query = @"
-        SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH, DATA_TYPE
+        SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH, DATA_TYPE, NUMERIC_PRECISION, NUMERIC_SCALE, DATETIME_PRECISION
         FROM INFORMATION_SCHEMA.COLUMNS
         WHERE TABLE_NAME = @TableName AND TABLE_SCHEMA = @TableSchema";
             DataTable columnSizes = new DataTable();
@@ -553,23 +521,104 @@ namespace Utilities
 
             return columnSizes;
         }
-        public static int GetColumnSize(DataTable columnSizes, string columnName)
+
+
+        private static readonly Dictionary<string, SqlDbType> SqlDbTypeMap = new Dictionary<string, SqlDbType>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "bigint", SqlDbType.BigInt },
+            { "binary", SqlDbType.Binary },
+            { "bit", SqlDbType.Bit },
+            { "char", SqlDbType.Char },
+            { "date", SqlDbType.Date },
+            { "datetime", SqlDbType.DateTime },
+            { "datetime2", SqlDbType.DateTime2 },
+            { "datetimeoffset", SqlDbType.DateTimeOffset },
+            { "decimal", SqlDbType.Decimal },
+            { "float", SqlDbType.Float },
+            { "image", SqlDbType.Image },
+            { "int", SqlDbType.Int },
+            { "money", SqlDbType.Money },
+            { "nchar", SqlDbType.NChar },
+            { "ntext", SqlDbType.NText },
+            { "numeric", SqlDbType.Decimal },
+            { "nvarchar", SqlDbType.NVarChar },
+            { "real", SqlDbType.Real },
+            { "rowversion", SqlDbType.Timestamp },
+            { "smalldatetime", SqlDbType.SmallDateTime },
+            { "smallint", SqlDbType.SmallInt },
+            { "smallmoney", SqlDbType.SmallMoney },
+            { "text", SqlDbType.Text },
+            { "time", SqlDbType.Time },
+            { "timestamp", SqlDbType.Timestamp },
+            { "tinyint", SqlDbType.TinyInt },
+            { "uniqueidentifier", SqlDbType.UniqueIdentifier },
+            { "varbinary", SqlDbType.VarBinary },
+            { "varchar", SqlDbType.VarChar },
+            { "xml", SqlDbType.Xml },
+            { "sql_variant", SqlDbType.Variant }
+        };
+
+        private static SqlDbType GetColumnSqlDbType(DataTable columnSizes, string columnName)
         {
             foreach (DataRow row in columnSizes.Rows)
             {
-                if (row["COLUMN_NAME"].ToString() == columnName)
+                if (string.Equals(row["COLUMN_NAME"].ToString(), columnName, StringComparison.OrdinalIgnoreCase))
                 {
-                    // Handle NVARCHAR(MAX) or VARCHAR(MAX)
-                    if (row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value || Convert.ToInt64(row["CHARACTER_MAXIMUM_LENGTH"]) == -1)
+                    string dataType = row["DATA_TYPE"].ToString();
+                    if (SqlDbTypeMap.TryGetValue(dataType, out SqlDbType sqlDbType))
                     {
-                        return int.MaxValue; // Treat as unlimited size
+                        return sqlDbType;
                     }
 
-                    // Return the actual size for NVARCHAR or VARCHAR
-                    return Convert.ToInt32(row["CHARACTER_MAXIMUM_LENGTH"]);
+                    break;
                 }
             }
-            return -1; // Column not found
+
+            return SqlDbType.Variant;
+        }
+
+        private static void ConfigureParameter(SqlParameter parameter, DataTable columnSizes, string columnName)
+        {
+            foreach (DataRow row in columnSizes.Rows)
+            {
+                if (!string.Equals(row["COLUMN_NAME"].ToString(), columnName, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (row.Table.Columns.Contains("CHARACTER_MAXIMUM_LENGTH") && row["CHARACTER_MAXIMUM_LENGTH"] != DBNull.Value)
+                {
+                    int columnSize = Convert.ToInt32(row["CHARACTER_MAXIMUM_LENGTH"]);
+                    if (columnSize > 0)
+                    {
+                        parameter.Size = columnSize;
+                    }
+                    else if (columnSize == -1)
+                    {
+                        parameter.Size = -1;
+                    }
+                }
+
+                if ((parameter.SqlDbType == SqlDbType.Decimal || parameter.SqlDbType == SqlDbType.Money || parameter.SqlDbType == SqlDbType.SmallMoney) &&
+                    row.Table.Columns.Contains("NUMERIC_PRECISION") && row["NUMERIC_PRECISION"] != DBNull.Value)
+                {
+                    parameter.Precision = Convert.ToByte(row["NUMERIC_PRECISION"]);
+                }
+
+                if ((parameter.SqlDbType == SqlDbType.Decimal || parameter.SqlDbType == SqlDbType.Money || parameter.SqlDbType == SqlDbType.SmallMoney) &&
+                    row.Table.Columns.Contains("NUMERIC_SCALE") && row["NUMERIC_SCALE"] != DBNull.Value)
+                {
+                    parameter.Scale = Convert.ToByte(row["NUMERIC_SCALE"]);
+                }
+
+                if ((parameter.SqlDbType == SqlDbType.DateTime2 || parameter.SqlDbType == SqlDbType.Time || parameter.SqlDbType == SqlDbType.DateTimeOffset) &&
+                    row.Table.Columns.Contains("DATETIME_PRECISION") && row["DATETIME_PRECISION"] != DBNull.Value)
+                {
+                    parameter.Scale = Convert.ToByte(row["DATETIME_PRECISION"]);
+                }
+
+                break;
+            }
         }
 
         #endregion CopyDB
