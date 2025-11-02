@@ -7,7 +7,7 @@
     <ProjectGuid>{AA24E933-C455-4196-92A5-06A949BD9426}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ConvertDB</RootNamespace>
-    <AssemblyName>ConvertDB</AssemblyName>
+    <AssemblyName>انتقال داده</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

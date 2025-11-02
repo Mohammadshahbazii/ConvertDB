@@ -500,6 +500,7 @@ namespace Utilities
                     }
                 }
             }
+        }
 
         public static DataTable GetColumnSizes(SqlConnection connection, string tableSchema, string tableName)
         {
