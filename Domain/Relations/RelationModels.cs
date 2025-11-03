@@ -14,6 +14,7 @@ namespace Domain
         public string DestinationTableName { get; set; }
         public string DestinationColumnName { get; set; }
         public int EventID { get; set; }
+        public string FilterCondition { get; set; }
 
     }
 

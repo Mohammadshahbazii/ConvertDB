@@ -94,6 +94,12 @@ namespace Bussiness
                 {
                     LogEvents.Log($"شروع انتقال از \n{mapping.SourceTableName}\n به \n{mapping.DestinationTableName}\n");
 
+                    if (!IsConditionSafe(mapping.FilterCondition))
+                    {
+                        LogEvents.Log($"شرط وارد شده برای جدول \n'{mapping.SourceTableName}'\n معتبر نیست و باعث توقف انتقال این ارتباط شد.");
+                        continue;
+                    }
+
                     // Step 1: Retrieve column information for the destination table
                     List<ColumnInfo> destinationColumns = GetColumnInfo(newDbConnectionString, mapping.DestinationTableName);
 
@@ -110,7 +116,7 @@ namespace Bussiness
                     {
                         await oldDbConnection.OpenAsync();
 
-                        string selectQuery = $"SELECT [{mapping.SourceColumnName}] FROM [{mapping.SourceTableName}];";
+                        string selectQuery = BuildSelectQuery(mapping);
                         using (SqlCommand selectCommand = new SqlCommand(selectQuery, oldDbConnection))
                         {
                             using (SqlDataReader reader = await selectCommand.ExecuteReaderAsync())
@@ -167,6 +173,38 @@ namespace Bussiness
         public void Dispose()
         {
             throw new NotImplementedException();
+        }
+
+        private static string BuildSelectQuery(RelationItemModels mapping)
+        {
+            var builder = new StringBuilder();
+            builder.AppendFormat("SELECT [{0}] FROM [{1}]", mapping.SourceColumnName, mapping.SourceTableName);
+
+            if (!string.IsNullOrWhiteSpace(mapping.FilterCondition))
+            {
+                builder.Append(" WHERE ");
+                builder.Append(mapping.FilterCondition);
+            }
+
+            builder.Append(";");
+            return builder.ToString();
+        }
+
+        private static bool IsConditionSafe(string condition)
+        {
+            if (string.IsNullOrWhiteSpace(condition))
+            {
+                return true;
+            }
+
+            string trimmed = condition.Trim();
+
+            if (trimmed.Contains(";") || trimmed.Contains("--") || trimmed.IndexOf("/*", StringComparison.Ordinal) >= 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
